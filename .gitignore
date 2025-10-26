@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.env
+.venv
+venv/
+ENV/
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# Node
+node_modules/
+.next/
+out/
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Logs and data
+*.log
+storage/
+.DS_Store
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# Misc
+*.sqlite3
+!.gitkeep
