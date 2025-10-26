@@ -4,7 +4,7 @@ param(
 
 Write-Host "==> Cài đặt môi trường backend" -ForegroundColor Cyan
 python -m pip install --upgrade pip
-python -m pip install -e backend[dev]
+python -m pip install -e "backend[dev]"
 
 Write-Host "==> Chạy Ruff" -ForegroundColor Cyan
 python -m ruff check backend/app
@@ -15,7 +15,7 @@ pytest backend/tests
 if (-not $SkipFrontend) {
     Write-Host "==> Cài đặt frontend" -ForegroundColor Cyan
     pushd frontend
-    npm install
+    npm install --no-fund --no-progress
     Write-Host "==> Chạy lint Next.js" -ForegroundColor Cyan
     npm run lint
     Write-Host "==> Chạy kiểm thử frontend" -ForegroundColor Cyan

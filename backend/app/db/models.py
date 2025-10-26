@@ -1,6 +1,6 @@
 """Định nghĩa bảng dữ liệu chính."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -10,6 +10,12 @@ class Base(DeclarativeBase):
     """Lớp cơ sở cho ORM."""
 
     pass
+
+
+def utc_now() -> datetime:
+    """Trả về thời điểm UTC hiện tại ở dạng timezone-aware."""
+
+    return datetime.now(UTC)
 
 
 class Document(Base):
@@ -22,16 +28,18 @@ class Document(Base):
     ten_hang: Mapped[str | None] = mapped_column(String(500), nullable=True)
     mo_ta_hang: Mapped[str | None] = mapped_column(Text, nullable=True)
     ma_hs: Mapped[str | None] = mapped_column(String(20), nullable=True, index=True)
-    ngay_ban_hanh: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    ngay_ban_hanh: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     co_quan_ban_hanh: Mapped[str | None] = mapped_column(String(255), nullable=True)
     nguon_pdf: Mapped[str | None] = mapped_column(String(1024), nullable=True)
     tep_noi_bo: Mapped[str | None] = mapped_column(String(1024), nullable=True)
     da_xu_ly: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), default=utc_now, nullable=False
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+        DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False
     )
 
     classifications: Mapped[list["Classification"]] = relationship(
@@ -59,8 +67,10 @@ class SyncLog(Base):
     __tablename__ = "sync_log"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    bat_dau: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
-    ket_thuc: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    bat_dau: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, nullable=False
+    )
+    ket_thuc: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     so_luong_tai: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     thanh_cong: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     thong_diep_loi: Mapped[str | None] = mapped_column(Text, nullable=True)
